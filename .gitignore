@@ -1,12 +1,8 @@
 node_modules/
-dist/
-build/
-logs
-*.log
-yarn.lock
 package-lock.json
-.env
-.idea/
+*.tsbuildinfo
+/dist/
 .vscode/
-*.swp
-memo.md
+.idea/
+.DS_Store
+memo.node
