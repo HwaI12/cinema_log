@@ -1,0 +1,12 @@
+node_modules/
+dist/
+build/
+logs
+*.log
+yarn.lock
+package-lock.json
+.env
+.idea/
+.vscode/
+*.swp
+memo.md
