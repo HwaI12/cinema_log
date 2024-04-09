@@ -9,4 +9,6 @@ if (!supabaseKey) {
     throw new Error('SUPABASE_KEY is not set in environment variables.');
 }
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+const client = createClient(supabaseUrl, supabaseKey);
+
+export default client;
