@@ -1,3 +1,5 @@
+// movieModel.ts
+
 import { supabase } from '../supabase';
 
 interface Movie {
@@ -10,26 +12,31 @@ interface Movie {
   updated_at: string;
 }
 
-export const getMoviesByUserId = async (userId: number): Promise<Movie[]> => {
-  const { data, error } = await supabase
-    .from('movies')
-    .select('*')
-    .eq('user_id', userId);
+export const Movie = {
+  getMoviesByUserId: async (userId: number): Promise<Movie[]> => {
+    const { data, error } = await supabase
+      .from('movies')
+      .select('*')
+      .eq('user_id', userId);
 
-  if (error) {
-    console.error('Error fetching movies:', error.message);
-    return [];
-  }
+    if (error) {
+      console.error('Error fetching movies:', error.message);
+      return [];
+    }
 
-  return data;
-};
+    return data ?? [];
+  },
 
-export const addMovie = async (movie: Movie): Promise<void> => {
-  const { error } = await supabase.from('movies').insert(movie);
+  addMovie: async (movie: Movie): Promise<void> => {
+    const { error } = await supabase.from('movies').insert([movie]);
 
-  if (error) {
-    console.error('Error adding movie:', error.message);
-  }
+    if (error) {
+      console.error('Error adding movie:', error.message);
+    }
+  },
+
+  // 他のメソッドも追加できます
+
 };
 
 export default Movie;
