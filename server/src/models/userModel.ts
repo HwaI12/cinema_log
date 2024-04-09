@@ -11,6 +11,7 @@ export interface User {
 }
 
 class UserModel {
+  // 指定されたユーザIDを持つユーザをデータベースから取得する
   async getUserById(userId: number): Promise<User | null> {
     const { data, error } = await supabase
       .from('users')
@@ -31,6 +32,7 @@ class UserModel {
     return data[0] as User;
   }
 
+  // 指定されたメアドを持つユーザをデータベースから取得する
   async findOne(query: { email: string }): Promise<User | null> {
     const { data, error } = await supabase
       .from('users')

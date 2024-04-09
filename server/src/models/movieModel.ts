@@ -1,42 +1,60 @@
-// movieModel.ts
-
 import { supabase } from '../supabase';
 
 interface Movie {
   id: number;
   user_id: number;
   title: string;
-  watched_date: string;
+  watched_date: Date;
   review?: string;
-  created_at: string;
-  updated_at: string;
+  created_at: Date;
+  updated_at: Date;
 }
 
-export const Movie = {
-  getMoviesByUserId: async (userId: number): Promise<Movie[]> => {
+class MovieModel {
+  async findAll(userId: number): Promise<Movie[]> {
     const { data, error } = await supabase
-      .from('movies')
-      .select('*')
-      .eq('user_id', userId);
+      .from("movies")
+      .select("*")
+      .eq("user_id", userId);
+  
+    if (error) {
+      throw error;
+    }
+  
+    return data as Movie[];
+  }
+
+  async create(movie: Partial<Movie>): Promise<void> {
+    const { error } = await supabase
+    .from("movies")
+    .insert([movie]);
 
     if (error) {
-      console.error('Error fetching movies:', error.message);
-      return [];
+      throw error;
     }
+  }
 
-    return data ?? [];
-  },
-
-  addMovie: async (movie: Movie): Promise<void> => {
-    const { error } = await supabase.from('movies').insert([movie]);
+  async update(movieId: number, movie: Partial<Movie>): Promise<void> {
+    const { error } = await supabase
+      .from("movies")
+      .update(movie)
+      .eq("id", movieId);
 
     if (error) {
-      console.error('Error adding movie:', error.message);
+      throw error;
     }
-  },
+  }
 
-  // 他のメソッドも追加できます
+  async delete(movieId: number): Promise<void> {
+    const { error } = await supabase
+      .from("movies")
+      .delete()
+      .eq("id", movieId);
+  
+    if (error) {
+      throw error;
+    }
+  }
+}
 
-};
-
-export default Movie;
+export default new MovieModel();

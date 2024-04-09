@@ -1,31 +1,19 @@
+// routes/user.ts
 import express from 'express';
+import { getMovieList, addMovieRecord, editMovieRecord, deleteMovieRecord } from '../controllers/moviesController';
+
 const router = express.Router();
 
-// GET /api/movies
-router.get('/', (req, res) => {
-    // データベースから映画情報を取得
-    res.json({ message: '映画情報を取得しました' });
-});
+// 映画記録一覧取得
+router.get('/', getMovieList);
 
-// POST /api/movies
-router.post('/', (req, res) => {
-    // 映画情報をデータベースに登録
-    res.json({ message: '映画情報を登録しました' });
-});
+// 映画記録追加
+router.post('/', addMovieRecord);
 
-// PUT /api/movies/:id
-router.put('/:id', (req, res) => {
-    // 指定されたIDの映画情報を更新するなどの処理を行う
-    const id = req.params.id;
-    res.json({ message: `映画 ${id} を更新しました` });
-});
+// 映画記録更新
+router.put('/:id', editMovieRecord);
 
-// DELETE /api/movies/:id
-router.delete('/:id', (req, res) => {
-    // 指定されたIDの映画情報を削除するなどの処理を行う
-    const id = req.params.id;
-    res.json({ message: `映画 ${id} を削除しました` });
-});
-
+// 映画記録削除
+router.delete('/:id', deleteMovieRecord);
 
 export default router;

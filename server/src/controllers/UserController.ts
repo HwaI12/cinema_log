@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import UserModel, { User } from '../models/userModel';
 import { supabase } from '../supabase';
+import jwt from 'jsonwebtoken';
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
@@ -39,7 +40,9 @@ export const loginUser = async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'メールアドレスまたはパスワードが正しくありません' });
     }
 
-    res.status(200).json({ message: 'ログインに成功しました' });
+    const token = jwt.sign({ userId: user.id }, 'secret', { expiresIn: '1h' });
+
+    res.status(200).json({ message: 'ログインに成功しました', token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'ログインに失敗しました' });
