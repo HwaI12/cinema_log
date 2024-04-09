@@ -1,6 +1,7 @@
+// userModel.ts
 import { supabase } from '../supabase';
 
-interface User {
+export interface User {
   id: number;
   username: string;
   email: string;
@@ -9,19 +10,45 @@ interface User {
   updated_at: string;
 }
 
-export const getUserById = async (userId: number): Promise<User | null> => {
-  const { data, error } = await supabase
-    .from('users')
-    .select('*')
-    .eq('id', userId)
-    .single();
+class UserModel {
+  async getUserById(userId: number): Promise<User | null> {
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('id', userId)
+      .limit(1);
 
-  if (error) {
-    console.error('Error fetching user:', error.message);
-    return null;
+    if (error) {
+      console.error('ユーザーの取得エラー:', error.message);
+      return null;
+    }
+
+    if (!data || data.length === 0) {
+      return null; // ユーザーが見つからない場合は null を返す
+    }
+
+    // 型キャストを追加
+    return data[0] as User;
   }
 
-  return data;
-};
+  async findOne(query: { email: string }): Promise<User | null> {
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .like('email', query.email)
+      .limit(1);
+  
+    if (error) {
+      console.error('ユーザーの取得エラー:', error.message);
+      return null;
+    }
 
-export default User;
+    if (!data || data.length === 0) {
+      return null; // ユーザーが見つからない場合は null を返す
+    }
+  
+    return data[0] as User;
+  }  
+}
+
+export default new UserModel();

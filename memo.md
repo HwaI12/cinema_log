@@ -25,3 +25,6 @@ movie-app/
     └── seeders/          # データベースシード
 ```
 </details>
+
+server起動の仕方
+`npx ts-node src/server.ts`

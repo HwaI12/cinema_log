@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import Movie from '../models/movieModel';
-import { supabase } from '../supabase';
 
 export const addWatchRecord = async (req: Request, res: Response) => {
     // 視聴記録追加処理
