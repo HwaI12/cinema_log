@@ -1,4 +1,4 @@
-// routes/user.ts
+// routes/movies.ts
 import express from 'express';
 import { getMovieList, addMovieRecord, editMovieRecord, deleteMovieRecord } from '../controllers/moviesController';
 
