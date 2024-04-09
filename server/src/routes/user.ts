@@ -1,10 +1,17 @@
-// routes/user.ts
+// src/routes/authRoutes.ts
+
 import express from 'express';
-import { registerUser, loginUser } from '../controllers/UserController';
+import { signUp, login, deleteAccount } from '../controllers/authController';
 
 const router = express.Router();
 
-router.post('/register', registerUser);
-router.post('/login', loginUser);
+// ユーザー登録
+router.post('/signup', signUp);
+
+// ログイン
+router.post('/login', login);
+
+// アカウント削除
+router.delete('/delete', deleteAccount);
 
 export default router;
