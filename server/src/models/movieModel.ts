@@ -1,33 +1,35 @@
+import { supabase } from '../supabase';
+
 interface Movie {
-    id: number;
-    title: string;
-    watchedDate: Date;
-    review?: string;
+  id: number;
+  user_id: number;
+  title: string;
+  watched_date: string;
+  review?: string;
+  created_at: string;
+  updated_at: string;
 }
 
-const movies: Movie[] = [
-    { id: 1, title: '映画1', watchedDate: new Date(), review: '面白かった' },
-    { id: 2, title: '映画2', watchedDate: new Date(), review: '感動した' },
-];
+export const getMoviesByUserId = async (userId: number): Promise<Movie[]> => {
+  const { data, error } = await supabase
+    .from('movies')
+    .select('*')
+    .eq('user_id', userId);
 
-export function getMovies(): Movie[] {
-    return movies;
-}
+  if (error) {
+    console.error('Error fetching movies:', error.message);
+    return [];
+  }
 
-export function addMovie(movie: Movie): void {
-    movies.push(movie);
-}
+  return data;
+};
 
-export function updateMovie(id: number, updatedMovie: Movie): void {
-    const index = movies.findIndex((movie) => movie.id === id);
-    if (index !== -1) {
-        movies[index] = { ...movies[index], ...updatedMovie };
-    }
-}
+export const addMovie = async (movie: Movie): Promise<void> => {
+  const { error } = await supabase.from('movies').insert(movie);
 
-export function deleteMovie(id: number): void {
-    const index = movies.findIndex((movie) => movie.id === id);
-    if (index !== -1) {
-        movies.splice(index, 1);
-    }
-}
+  if (error) {
+    console.error('Error adding movie:', error.message);
+  }
+};
+
+export default Movie;
