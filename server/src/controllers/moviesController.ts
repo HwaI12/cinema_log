@@ -6,6 +6,10 @@ import { AuthenticatedRequest } from '../middlewares/authMiddleware';
 // ユーザが登録した映画記録一覧を取得
 export const getMovieList = async (req: AuthenticatedRequest, res: Response) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: 'ユーザが見つかりません' });
+    }
+
     const movies = await MovieModel.findAll(req.user.id);
     return res.status(200).json({ movies });
   } catch (error) {
@@ -17,6 +21,10 @@ export const getMovieList = async (req: AuthenticatedRequest, res: Response) => 
 export const addMovieRecord = async (req: AuthenticatedRequest, res: Response) => {
   const { title, watched_date, review } = req.body;
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: 'ユーザが見つかりません' });
+    }
+
     await MovieModel.create({
       user_id: req.user.id,
       title,
