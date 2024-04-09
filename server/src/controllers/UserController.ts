@@ -1,13 +1,30 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
+import User from '../models/userModel';
 
-export const addRecord = { req: Request, res: Response } => {
-    // 視聴記録追加処理
+export const registerUser = async (req: Request, res: Response) => {
+    try {
+        const { username, email, password } = req.body;
+        // ユーザーの新規登録処理
+        const user = new User({ username, email, password });
+        await user.save();
+        res.status(201).json({ message: 'ユーザーを登録しました' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'ユーザーの登録に失敗しました' });
+    }
 };
 
-export const editRecord = { req: Request, res: Response } => {
-    // 視聴記録編集処理
-};
-
-export const deleteRecord = { req: Request, res: Response } => {
-    // 視聴記録削除処理
+export const loginUser = async (req: Request, res: Response) => {
+    try {
+        const { email, password } = req.body;
+        // ユーザーのログイン処理
+        const user = await User.findOne({ email });
+        if (!user || user.password !== password) {
+            throw new Error('ログインに失敗しました');
+        }
+        res.status(200).json({ message: 'ログインしました', user });
+    } catch (error) {
+        console.error(error);
+        res.status(401).json({ message: 'ログインに失敗しました' });
+    }
 };
