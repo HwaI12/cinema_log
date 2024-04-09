@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import User from '../models/userModel';
+import User from '../models/movieModel';
 
 export const registerUser = async (req: Request, res: Response) => {
     try {
