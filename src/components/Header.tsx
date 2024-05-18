@@ -1,0 +1,64 @@
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { supabase } from '../lib/supabaseClient';
+import styled from 'styled-components';
+
+const HeaderContainer = styled.header`
+  width: 100%;
+  padding: 1rem;
+  background-color: #0070f3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+`;
+
+const Button = styled.button`
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  background-color: white;
+  color: #0070f3;
+  font-size: 1rem;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #e0e0e0;
+  }
+`;
+
+const Header = () => {
+  const [user, setUser] = useState<any>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      if (error) {
+        console.error(error);
+        return;
+      }
+      setUser(data?.session?.user ?? null);
+    };
+    fetchUser();
+  }, []);
+
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      alert(error.message);
+    } else {
+      setUser(null);
+      router.push('/auth/signin');
+    }
+  };
+
+  return (
+    <HeaderContainer>
+      <Button onClick={() => router.push('/')}>Home</Button>
+      {user && <Button onClick={handleLogout}>Logout</Button>}
+    </HeaderContainer>
+  );
+};
+
+export default Header;
