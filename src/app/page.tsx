@@ -1,95 +1,83 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+// src/app/page.tsx
+"use client"; // これを追加して、クライアントコンポーネントとしてマークします
 
-export default function Home() {
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation'; // next/router の代わりに next/navigation を使用
+import { supabase } from '../lib/supabaseClient';
+
+const HomePage = () => {
+  const [user, setUser] = useState<any>(null);
+  const [title, setTitle] = useState('');
+  const [rating, setRating] = useState(0);
+  const [review, setReview] = useState('');
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      if (error) {
+        console.error(error);
+        return;
+      }
+      setUser(data?.session?.user ?? null);
+      if (!data?.session) {
+        router.push('/auth/signin');
+      }
+    };
+    fetchUser();
+  }, [router]);
+
+  const handleSave = async () => {
+    if (!user) {
+      alert('You must be logged in to save a review.');
+      return;
+    }
+    
+    const { error } = await supabase
+      .from('movies')
+      .insert([{ title, rating, review, date: new Date().toISOString(), user_id: user.id }]);
+    if (error) {
+      alert(error.message);
+    } else {
+      setTitle('');
+      setRating(0);
+      setReview('');
+      alert('Movie review saved successfully!');
+    }
+  };
+
+  if (!user) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div>
+      <h1>Record a Movie Review</h1>
+      <input
+        type="text"
+        placeholder="Movie Title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
+      <div>
+        {[1, 2, 3, 4, 5].map((star) => (
+          <span
+            key={star}
+            onClick={() => setRating(star)}
+            style={{ cursor: 'pointer', color: star <= rating ? 'gold' : 'grey' }}
           >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
+            ★
+          </span>
+        ))}
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+      <textarea
+        placeholder="Review"
+        value={review}
+        onChange={(e) => setReview(e.target.value)}
+      />
+      <button onClick={handleSave}>Save</button>
+    </div>
   );
-}
+};
+
+export default HomePage;
