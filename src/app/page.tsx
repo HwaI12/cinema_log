@@ -1,166 +1,47 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '../lib/supabaseClient';
 import Header from '../components/Header';
-import styled from 'styled-components';
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: calc(100vh - 60px); /* Adjust height to accommodate header */
-  background-color: #f5f5f5;
-  padding: 20px;
-`;
-
-const Title = styled.h1`
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  color: #333;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  max-width: 400px;
-  padding: 0.75rem;
-  margin-bottom: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1rem;
-`;
-
-const TextArea = styled.textarea`
-  width: 100%;
-  max-width: 400px;
-  padding: 0.75rem;
-  margin-bottom: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1rem;
-  height: 150px;
-`;
-
-const Button = styled.button`
-  width: 100%;
-  max-width: 400px;
-  padding: 0.75rem;
-  margin-bottom: 1rem;
-  border: none;
-  border-radius: 5px;
-  background-color: #0070f3;
-  color: white;
-  font-size: 1rem;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #005bb5;
-  }
-
-  &:disabled {
-    background-color: #aaa;
-    cursor: not-allowed;
-  }
-`;
-
-const Stars = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
-`;
-
-const Star = styled.span<{ active: boolean }>`
-  cursor: pointer;
-  font-size: 2rem;
-  color: ${props => (props.active ? 'gold' : 'grey')};
-
-  &:hover {
-    color: gold;
-  }
-`;
+import { Session } from '@supabase/supabase-js';
 
 const HomePage = () => {
-  const [user, setUser] = useState<any>(null);
-  const [title, setTitle] = useState('');
-  const [rating, setRating] = useState(0);
-  const [review, setReview] = useState('');
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const { data, error } = await supabase.auth.getSession();
-      if (error) {
-        console.error(error);
-        return;
-      }
-      setUser(data?.session?.user ?? null);
-      if (!data?.session) {
-        router.push('/auth/signin');
-      }
+    const fetchSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setSession(session);
     };
-    fetchUser();
-  }, [router]);
 
-  const handleSave = async () => {
-    if (!user) {
-      alert('You must be logged in to save a review.');
-      return;
+    fetchSession();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      setSession(session);
+    });
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (session) {
+      router.push('/movies');
     }
-
-    setLoading(true);
-    const { error } = await supabase
-      .from('movies')
-      .insert([{ title, rating, review, date: new Date().toISOString(), user_id: user.id }]);
-    setLoading(false);
-    if (error) {
-      alert(error.message);
-    } else {
-      setTitle('');
-      setRating(0);
-      setReview('');
-      alert('Movie review saved successfully!');
-    }
-  };
-
-  if (!user) {
-    return <Container>Loading...</Container>;
-  }
+  }, [session, router]);
 
   return (
-    <>
+    <div className="container">
       <Header />
-      <Container>
-        <Title>Record a Movie</Title>
-        <Input
-          type="text"
-          placeholder="Movie Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <Stars>
-          {[1, 2, 3, 4, 5].map((star) => (
-            <Star
-              key={star}
-              active={star <= rating}
-              onClick={() => setRating(star)}
-            >
-              ★
-            </Star>
-          ))}
-        </Stars>
-        <TextArea
-          placeholder="Review"
-          value={review}
-          onChange={(e) => setReview(e.target.value)}
-        />
-        <Button onClick={handleSave} disabled={loading}>
-          {loading ? 'Loading...' : 'Save'}
-        </Button>
-      </Container>
-    </>
+      <div className="content">
+        <h1>Welcome to CinemaLog</h1>
+        <p>Please sign in to continue</p>
+        <button onClick={() => router.push('/auth/signin')}>Sign In</button>
+      </div>
+    </div>
   );
 };
 
