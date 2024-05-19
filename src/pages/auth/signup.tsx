@@ -62,30 +62,35 @@ const Button = styled.button`
   }
 `;
 
-const SignIn = () => {
+const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleSignIn = async () => {
+  const handleSignUp = async () => {
     setLoading(true);
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: window.location.origin + '/auth/signin',
+      },
+    });
     setLoading(false);
 
     if (error) {
-      alert('Invalid login credentials. Please check your email and password and try again.');
-    } else if (data?.user?.email_confirmed_at === null) {
-      alert('Please confirm your email address before signing in.');
+      alert(error.message);
     } else {
-      router.push('/');
+      alert('Check your email for the confirmation link.');
+      router.push('/auth/signin');
     }
   };
 
   return (
     <Container>
       <Form>
-        <Title>Sign In</Title>
+        <Title>Sign Up</Title>
         <Input
           type="email"
           placeholder="Email"
@@ -98,12 +103,12 @@ const SignIn = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button onClick={handleSignIn} disabled={loading}>
-          {loading ? 'Loading...' : 'Sign In'}
+        <Button onClick={handleSignUp} disabled={loading}>
+          {loading ? 'Loading...' : 'Sign Up'}
         </Button>
       </Form>
     </Container>
   );
 };
 
-export default SignIn;
+export default SignUp;

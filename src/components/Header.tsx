@@ -15,11 +15,14 @@ const HeaderContainer = styled.header`
   position: fixed;
   top: 0;
   z-index: 1000;
+  box-sizing: border-box;
 `;
 
 const Logo = styled.div`
   font-family: 'Pacifico', cursive;
   font-size: 1.5rem;
+  cursor: pointer;
+  flex-shrink: 0;
 `;
 
 const Button = styled.button`
@@ -31,6 +34,7 @@ const Button = styled.button`
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  flex-shrink: 0;
 
   &:hover {
     background-color: #ffe0dc;
