@@ -1,136 +1,134 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
-import Header from '../../components/Header';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 import styled from 'styled-components';
+import { PlusCircleIcon } from '@heroicons/react/solid';
+import Header from '../../components/Header';
 
 const Container = styled.div`
+  padding: 2rem;
+  margin-top: 5rem; /* Headerの高さに応じて調整してください */
+`;
+
+const MovieList = styled.ul`
+  list-style-type: none;
+  padding: 0;
+  margin: 0; /* 不要な余白を削除 */
+`;
+
+const MovieItem = styled.li`
+  background: white;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+`;
+
+const Title = styled.h2`
+  margin: 0;
+`;
+
+const Rating = styled.div`
+  color: gold;
+`;
+
+const Review = styled.p`
+  margin: 0.5rem 0 0 0;
+`;
+
+const DateText = styled.p`
+  font-size: 0.8rem;
+  color: grey;
+`;
+
+const AddButtonContainer = styled.div`
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+`;
+
+const AddButton = styled.button`
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: calc(100vh - 60px); /* Adjust height to accommodate header */
-  background-color: #f5f5f5;
-  padding: 20px;
-`;
-
-const Title = styled.h1`
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  color: #333;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  max-width: 400px;
-  padding: 0.75rem;
-  margin-bottom: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1rem;
-`;
-
-const TextArea = styled.textarea`
-  width: 100%;
-  max-width: 400px;
-  padding: 0.75rem;
-  margin-bottom: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1rem;
-  height: 150px;
-`;
-
-const Button = styled.button`
-  width: 100%;
-  max-width: 400px;
-  padding: 0.75rem;
-  margin-bottom: 1rem;
-  border: none;
-  border-radius: 5px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
   background-color: #0070f3;
   color: white;
-  font-size: 1rem;
+  font-size: 24px;
+  border: none;
   cursor: pointer;
 
   &:hover {
     background-color: #005bb5;
   }
-
-  &:disabled {
-    background-color: #aaa;
-    cursor: not-allowed;
-  }
 `;
 
-const Stars = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
-`;
+interface Movie {
+  id: number;
+  title: string;
+  rating: number;
+  review: string;
+  date: string;
+}
 
-const Star = styled.span<{ active: boolean }>`
-  cursor: pointer;
-  font-size: 2rem;
-  color: ${props => (props.active ? 'gold' : 'grey')};
+const Movies = () => {
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const router = useRouter();
 
-  &:hover {
-    color: gold;
-  }
-`;
+  useEffect(() => {
+    const fetchMovies = async () => {
+      const { data: { session }, error } = await supabase.auth.getSession();
+      if (error) {
+        console.error(error);
+        return;
+      }
+      const user = session?.user;
+      if (user) {
+        const { data, error } = await supabase
+          .from('movies')
+          .select('*')
+          .eq('user_id', user.id);
+        if (error) {
+          console.error(error);
+        } else {
+          setMovies(data || []);
+        }
+      } else {
+        router.push('/auth/signin');
+      }
+    };
 
-export default function Movies() {
-  const [title, setTitle] = useState('');
-  const [rating, setRating] = useState(0);
-  const [review, setReview] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  const handleSave = async () => {
-    setLoading(true);
-    const { error } = await supabase
-      .from('movies')
-      .insert([{ title, rating, review, date: new Date().toISOString() }]);
-    setLoading(false);
-    if (error) {
-      alert(error.message);
-    } else {
-      setTitle('');
-      setRating(0);
-      setReview('');
-      alert('Movie review saved successfully!');
-    }
-  };
+    fetchMovies();
+  }, [router]);
 
   return (
     <>
       <Header />
       <Container>
-        <Title>Record a Movie</Title>
-        <Input
-          type="text"
-          placeholder="Movie Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <Stars>
-          {[1, 2, 3, 4, 5].map((star) => (
-            <Star
-              key={star}
-              active={star <= rating}
-              onClick={() => setRating(star)}
-            >
-              ★
-            </Star>
+        <h1>My Movie Reviews</h1>
+        <MovieList>
+          {movies.map((movie) => (
+            <MovieItem key={movie.id}>
+              <Title>{movie.title}</Title>
+              <Rating>{'★'.repeat(movie.rating)}{'☆'.repeat(5 - movie.rating)}</Rating>
+              <Review>{movie.review}</Review>
+              <DateText>{new Date(movie.date).toLocaleDateString()}</DateText>
+            </MovieItem>
           ))}
-        </Stars>
-        <TextArea
-          placeholder="Review"
-          value={review}
-          onChange={(e) => setReview(e.target.value)}
-        />
-        <Button onClick={handleSave} disabled={loading}>
-          {loading ? 'Loading...' : 'Save'}
-        </Button>
+        </MovieList>
+        <AddButtonContainer>
+          <Link href="/movies/new" passHref>
+            <AddButton>
+              <PlusCircleIcon className="w-10 h-10 text-white" />
+            </AddButton>
+          </Link>
+        </AddButtonContainer>
       </Container>
     </>
   );
-}
+};
+
+export default Movies;
