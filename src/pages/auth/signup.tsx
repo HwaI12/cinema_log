@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
+import Link from 'next/link';
 
 const Container = styled.div`
   display: flex;
@@ -11,7 +12,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: #f5f5f5;
+  background-color: #fff;
   padding: 20px;
 `;
 
@@ -22,6 +23,8 @@ const Form = styled.div`
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 400px;
+  border: 1px solid #d9dae2; /* フォームの枠線の色 */
+  box-sizing: border-box;
 `;
 
 const Title = styled.h1`
@@ -31,11 +34,20 @@ const Title = styled.h1`
   text-align: center;
 `;
 
+const Label = styled.label`
+  display: block;
+  text-align: left;
+  width: 100%;
+  margin-bottom: 0.3rem;
+  color: #333;
+  font-size: 1rem;
+`;
+
 const Input = styled.input`
   width: 100%;
   padding: 0.75rem;
   margin-bottom: 1rem;
-  border: 1px solid #ccc;
+  border: 1px solid #d9dae2; /* 入力フィールドの枠線の色 */
   border-radius: 5px;
   font-size: 1rem;
   box-sizing: border-box;
@@ -47,19 +59,25 @@ const Button = styled.button`
   margin-bottom: 1rem;
   border: none;
   border-radius: 5px;
-  background-color: #0070f3;
-  color: white;
+  background-color: #eede77; /* ボタンの色 */
+  color: #333; /* ボタンの文字色 */
   font-size: 1rem;
   cursor: pointer;
 
   &:hover {
-    background-color: #005bb5;
+    background-color: #e0d569; /* ホバー時のボタンの色 */
   }
 
   &:disabled {
     background-color: #aaa;
     cursor: not-allowed;
   }
+`;
+
+const LinkText = styled.p`
+  color: #333; /* リンクテキストの色 */
+  font-size: 0.875rem;
+  text-align: right; /* テキストを右揃えに変更 */
 `;
 
 const SignUp = () => {
@@ -82,7 +100,7 @@ const SignUp = () => {
     if (error) {
       alert(error.message);
     } else {
-      alert('Check your email for the confirmation link.');
+      alert('確認リンクをメールで確認してください。');
       router.push('/auth/signin');
     }
   };
@@ -90,22 +108,27 @@ const SignUp = () => {
   return (
     <Container>
       <Form>
-        <Title>Sign Up</Title>
+        <Title>サインアップ</Title>
+        <Label>メールアドレス</Label>
         <Input
           type="email"
-          placeholder="Email"
+          placeholder="email@example.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
+        <Label>パスワード</Label>
         <Input
           type="password"
-          placeholder="Password"
+          placeholder="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         <Button onClick={handleSignUp} disabled={loading}>
-          {loading ? 'Loading...' : 'Sign Up'}
+          {loading ? 'ロード中...' : 'サインアップ'}
         </Button>
+        <LinkText>
+          <Link href="/auth/signin">ログインはこちら</Link>
+        </LinkText>
       </Form>
     </Container>
   );
