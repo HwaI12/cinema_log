@@ -5,6 +5,7 @@ import { supabase } from '../../lib/supabaseClient';
 import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
 import Link from 'next/link';
+import Header from '../../components/Header';
 
 const Container = styled.div`
   display: flex;
@@ -14,6 +15,8 @@ const Container = styled.div`
   height: 100vh;
   background-color: #fff;
   padding: 20px;
+  font-family: 'Zen Maru Gothic', serif; /* フォントを適用 */
+  transition: background-color 0.3s ease-in-out; /* 背景色のトランジション */
 `;
 
 const Form = styled.div`
@@ -25,6 +28,12 @@ const Form = styled.div`
   max-width: 400px;
   border: 1px solid #d9dae2; /* フォームの枠線の色 */
   box-sizing: border-box;
+  font-family: 'Zen Maru Gothic', serif; /* フォントを適用 */
+  transition: box-shadow 0.3s ease-in-out; /* ボックスシャドウのトランジション */
+
+  &:hover {
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* ホバー時のボックスシャドウ */
+  }
 `;
 
 const Title = styled.h1`
@@ -32,6 +41,7 @@ const Title = styled.h1`
   margin-bottom: 1.5rem;
   color: #333;
   text-align: center;
+  font-family: 'Zen Maru Gothic', serif; /* フォントを適用 */
 `;
 
 const Label = styled.label`
@@ -41,6 +51,7 @@ const Label = styled.label`
   margin-bottom: 0.3rem;
   color: #333;
   font-size: 1rem;
+  font-family: 'Zen Maru Gothic', serif; /* フォントを適用 */
 `;
 
 const Input = styled.input`
@@ -51,6 +62,13 @@ const Input = styled.input`
   border-radius: 5px;
   font-size: 1rem;
   box-sizing: border-box;
+  font-family: 'Zen Maru Gothic', serif; /* フォントを適用 */
+  transition: border-color 0.3s ease-in-out; /* ボーダーカラーのトランジション */
+
+  &:focus {
+    border-color: #0070f3; /* フォーカス時のボーダーカラー */
+    box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.2); /* フォーカス時のボックスシャドウ */
+  }
 `;
 
 const Button = styled.button`
@@ -63,9 +81,12 @@ const Button = styled.button`
   color: #333; /* ボタンの文字色 */
   font-size: 1rem;
   cursor: pointer;
+  font-family: 'Zen Maru Gothic', serif; /* フォントを適用 */
+  transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out; /* バックグラウンドカラーとトランスフォームのトランジション */
 
   &:hover {
     background-color: #e0d569; /* ホバー時のボタンの色 */
+    transform: translateY(-2px); /* ホバー時のトランスフォーム */
   }
 
   &:disabled {
@@ -78,6 +99,7 @@ const LinkText = styled.p`
   color: #333; /* リンクテキストの色 */
   font-size: 0.875rem;
   text-align: right; /* テキストを右揃えに変更 */
+  font-family: 'Zen Maru Gothic', serif; /* フォントを適用 */
 `;
 
 const SignUp = () => {
@@ -106,31 +128,34 @@ const SignUp = () => {
   };
 
   return (
-    <Container>
-      <Form>
-        <Title>サインアップ</Title>
-        <Label>メールアドレス</Label>
-        <Input
-          type="email"
-          placeholder="email@example.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <Label>パスワード</Label>
-        <Input
-          type="password"
-          placeholder="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <Button onClick={handleSignUp} disabled={loading}>
-          {loading ? 'ロード中...' : 'サインアップ'}
-        </Button>
-        <LinkText>
-          <Link href="/auth/signin">ログインはこちら</Link>
-        </LinkText>
-      </Form>
-    </Container>
+    <>
+      <Header />
+      <Container>
+        <Form>
+          <Title>会員登録</Title>
+          <Label>メールアドレス</Label>
+          <Input
+            type="email"
+            placeholder="email@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Label>パスワード</Label>
+          <Input
+            type="password"
+            placeholder="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Button onClick={handleSignUp} disabled={loading}>
+            {loading ? 'ロード中...' : '会員登録'}
+          </Button>
+          <LinkText>
+            <Link href="/auth/signin">ログインはこちら</Link>
+          </LinkText>
+        </Form>
+      </Container>
+    </>
   );
 };
 
