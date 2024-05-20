@@ -66,8 +66,7 @@ const Input = styled.input`
   transition: border-color 0.3s ease-in-out; /* ボーダーカラーのトランジション */
 
   &:focus {
-    border-color: #0070f3; /* フォーカス時のボーダーカラー */
-    box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.2); /* フォーカス時のボックスシャドウ */
+    border-color: #2e4d61; /* フォーカス時のボーダーカラー */
   }
 `;
 
@@ -86,7 +85,6 @@ const Button = styled.button`
 
   &:hover {
     background-color: #e0d569; /* ホバー時のボタンの色 */
-    transform: translateY(-2px); /* ホバー時のトランスフォーム */
   }
 
   &:disabled {
