@@ -55,14 +55,15 @@ const AddButton = styled.button`
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background-color: #0070f3;
+  background-color: #eede77;
   color: white;
   font-size: 24px;
   border: none;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #005bb5;
+    background-color: #e0d569;
   }
 `;
 
