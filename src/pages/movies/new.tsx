@@ -125,12 +125,13 @@ interface StarRatingProps {
 }
 
 const StarRating: React.FC<StarRatingProps> = ({ rating, setRating }) => (
+  // 星の評価をクリックしたときに評価をセットする
   <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
     {[1, 2, 3, 4, 5].map((star) => (
       <span
         key={star}
         onClick={() => setRating(star)}
-        style={{ cursor: 'pointer', fontSize: '2rem', color: star <= rating ? 'gold' : 'grey', transition: 'color 0.2s ease-in-out' }} /* 色のトランジション */
+        style={{ cursor: 'pointer', fontSize: '2rem', color: star <= rating ? 'gold' : 'grey', transition: 'color 0.2s ease-in-out' }}
       >
         ★
       </span>
@@ -147,6 +148,7 @@ const NewMovie = () => {
 
   const handleSave = async () => {
     setLoading(true);
+    // セッション情報を取得
     const { data: { session }, error } = await supabase.auth.getSession();
     if (error) {
       console.error(error);
@@ -160,6 +162,7 @@ const NewMovie = () => {
       return;
     }
 
+    // 映画データを保存
     const { data, error: insertError } = await supabase
       .from('movies')
       .insert([{ title, rating, review, date: new Date().toISOString(), user_id: user.id }]);
@@ -168,6 +171,7 @@ const NewMovie = () => {
     if (insertError) {
       alert(insertError.message);
     } else {
+      // 映画一覧ページにリダイレクト
       router.push('/movies');
     }
   };
