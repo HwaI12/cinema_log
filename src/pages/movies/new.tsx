@@ -12,8 +12,8 @@ const Container = styled.div`
   padding: 2rem;
   height: 100vh;
   background-color: #fff;
-  font-family: 'Zen Maru Gothic', serif; /* フォントを適用 */
-  transition: background-color 0.3s ease-in-out; /* 背景色のトランジション */
+  font-family: 'Zen Maru Gothic', serif;
+  transition: background-color 0.3s ease-in-out;
 `;
 
 const Form = styled.div`
@@ -23,13 +23,13 @@ const Form = styled.div`
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 400px;
-  border: 1px solid #d9dae2; /* フォームの枠線の色 */
+  border: 1px solid #d9dae2;
   box-sizing: border-box;
-  font-family: 'Zen Maru Gothic', serif; /* フォントを適用 */
-  transition: box-shadow 0.3s ease-in-out; /* ボックスシャドウのトランジション */
+  font-family: 'Zen Maru Gothic', serif; 
+  transition: box-shadow 0.3s ease-in-out;
 
   &:hover {
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* ホバー時のボックスシャドウ */
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
   }
 `;
 
@@ -38,7 +38,7 @@ const Title = styled.h1`
   margin-bottom: 1.5rem;
   color: #333;
   text-align: center;
-  font-family: 'Zen Maru Gothic', serif; /* フォントを適用 */
+  font-family: 'Zen Maru Gothic', serif;
 `;
 
 const Label = styled.label`
@@ -48,23 +48,23 @@ const Label = styled.label`
   margin-bottom: 0.3rem;
   color: #333;
   font-size: 1rem;
-  font-family: 'Zen Maru Gothic', serif; /* フォントを適用 */
+  font-family: 'Zen Maru Gothic', serif;
 `;
 
 const Input = styled.input`
   width: 100%;
   padding: 0.75rem;
   margin-bottom: 1rem;
-  border: 1px solid #d9dae2; /* 入力フィールドの枠線の色 */
+  border: 1px solid #d9dae2;
   border-radius: 5px;
   font-size: 1rem;
   box-sizing: border-box;
-  font-family: 'Zen Maru Gothic', serif; /* フォントを適用 */
-  transition: border-color 0.3s ease-in-out; /* ボーダーカラーのトランジション */
+  font-family: 'Zen Maru Gothic', serif;
+  transition: border-color 0.3s ease-in-out;
 
   &:focus {
-    border-color: #0070f3; /* フォーカス時のボーダーカラー */
-    box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.2); /* フォーカス時のボックスシャドウ */
+    border-color: #0070f3;
+    box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.2); 
   }
 `;
 
@@ -72,16 +72,16 @@ const TextArea = styled.textarea`
   width: 100%;
   padding: 0.75rem;
   margin-bottom: 1rem;
-  border: 1px solid #d9dae2; /* 入力フィールドの枠線の色 */
+  border: 1px solid #d9dae2;
   border-radius: 5px;
   font-size: 1rem;
   box-sizing: border-box;
-  font-family: 'Zen Maru Gothic', serif; /* フォントを適用 */
-  transition: border-color 0.3s ease-in-out; /* ボーダーカラーのトランジション */
+  font-family: 'Zen Maru Gothic', serif;
+  transition: border-color 0.3s ease-in-out;
 
   &:focus {
-    border-color: #0070f3; /* フォーカス時のボーダーカラー */
-    box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.2); /* フォーカス時のボックスシャドウ */
+    border-color: #0070f3;
+    box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.2);
   }
 `;
 
@@ -91,16 +91,16 @@ const Button = styled.button`
   margin-bottom: 1rem;
   border: none;
   border-radius: 5px;
-  background-color: #eede77; /* ボタンの色 */
-  color: #333; /* ボタンの文字色 */
+  background-color: #eede77;
+  color: #333;
   font-size: 1rem;
   cursor: pointer;
-  font-family: 'Zen Maru Gothic', serif; /* フォントを適用 */
-  transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out; /* バックグラウンドカラーとトランスフォームのトランジション */
+  font-family: 'Zen Maru Gothic', serif;
+  transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
 
   &:hover {
-    background-color: #e0d569; /* ホバー時のボタンの色 */
-    transform: translateY(-2px); /* ホバー時のトランスフォーム */
+    background-color: #e0d569;
+    transform: translateY(-2px);
   }
 
   &:disabled {
@@ -110,12 +110,12 @@ const Button = styled.button`
 `;
 
 const BackButton = styled(Button)`
-  background-color: #ccc; /* 戻るボタンの色 */
+  background-color: #ccc;
   color: #333;
 
   &:hover {
     background-color: #aaa;
-    transform: translateY(-2px); /* ホバー時のトランスフォーム */
+    transform: translateY(-2px);
   }
 `;
 

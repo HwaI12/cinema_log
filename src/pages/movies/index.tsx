@@ -8,13 +8,13 @@ import Header from '../../components/Header';
 
 const Container = styled.div`
   padding: 2rem;
-  margin-top: 5rem; /* Headerの高さに応じて調整してください */
+  margin-top: 5rem;
 `;
 
 const MovieList = styled.ul`
   list-style-type: none;
   padding: 0;
-  margin: 0; /* 不要な余白を削除 */
+  margin: 0;
 `;
 
 const MovieItem = styled.li`
@@ -81,6 +81,7 @@ const Movies = () => {
 
   useEffect(() => {
     const fetchMovies = async () => {
+      // supabase.auth.getSession() を使用して現在のユーザーセッションを取得
       const { data: { session }, error } = await supabase.auth.getSession();
       if (error) {
         console.error(error);
@@ -88,6 +89,7 @@ const Movies = () => {
       }
       const user = session?.user;
       if (user) {
+        // 'movies' テーブルから、ログインユーザーの ID に一致するすべての映画データを選択
         const { data, error } = await supabase
           .from('movies')
           .select('*')
@@ -95,9 +97,12 @@ const Movies = () => {
         if (error) {
           console.error(error);
         } else {
+          // 取得したデータを状態にセット
+          // データが存在しない場合は空の配列をセット
           setMovies(data || []);
         }
       } else {
+        // ユーザーが存在しない場合はログインページにリダイレクト
         router.push('/auth/signin');
       }
     };

@@ -15,8 +15,8 @@ const Container = styled.div`
   height: 100vh;
   background-color: #fff;
   padding: 20px;
-  font-family: 'Zen Maru Gothic', serif; /* フォントを適用 */
-  transition: background-color 0.3s ease-in-out; /* 背景色のトランジション */
+  font-family: 'Zen Maru Gothic', serif;
+  transition: background-color 0.3s ease-in-out;
 `;
 
 const Form = styled.div`
@@ -28,11 +28,11 @@ const Form = styled.div`
   max-width: 400px;
   border: 1px solid #d9dae2; /* フォームの枠線の色 */
   box-sizing: border-box;
-  font-family: 'Zen Maru Gothic', serif; /* フォントを適用 */
-  transition: box-shadow 0.3s ease-in-out; /* ボックスシャドウのトランジション */
+  font-family: 'Zen Maru Gothic', serif;
+  transition: box-shadow 0.3s ease-in-out;
 
   &:hover {
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* ホバー時のボックスシャドウ */
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
   }
 `;
 
@@ -51,22 +51,22 @@ const Label = styled.label`
   margin-bottom: 0.3rem;
   color: #333;
   font-size: 1rem;
-  font-family: 'Zen Maru Gothic', serif; /* フォントを適用 */
+  font-family: 'Zen Maru Gothic', serif;
 `;
 
 const Input = styled.input`
   width: 100%;
   padding: 0.75rem;
   margin-bottom: 1rem;
-  border: 1px solid #d9dae2; /* 入力フィールドの枠線の色 */
+  border: 1px solid #d9dae2;
   border-radius: 5px;
   font-size: 1rem;
   box-sizing: border-box;
-  font-family: 'Zen Maru Gothic', serif; /* フォントを適用 */
-  transition: border-color 0.3s ease-in-out; /* ボーダーカラーのトランジション */
+  font-family: 'Zen Maru Gothic', serif;
+  transition: border-color 0.3s ease-in-out;
 
   &:focus {
-    border-color: #2e4d61; /* フォーカス時のボーダーカラー */
+    border-color: #2e4d61;
   }
 `;
 
@@ -76,15 +76,14 @@ const Button = styled.button`
   margin-bottom: 1rem;
   border: none;
   border-radius: 5px;
-  background-color: #eede77; /* ボタンの色 */
-  color: #333; /* ボタンの文字色 */
+  background-color: #eede77;
+  color: #333;
   font-size: 1rem;
   cursor: pointer;
-  font-family: 'Zen Maru Gothic', serif; /* フォントを適用 */
-  transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out; /* バックグラウンドカラーとトランスフォームのトランジション */
-
+  font-family: 'Zen Maru Gothic', serif;
+  transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
   &:hover {
-    background-color: #e0d569; /* ホバー時のボタンの色 */
+    background-color: #e0d569;
   }
 
   &:disabled {
@@ -94,10 +93,10 @@ const Button = styled.button`
 `;
 
 const LinkText = styled.p`
-  color: #333; /* リンクテキストの色 */
+  color: #333; 
   font-size: 0.875rem;
-  text-align: right; /* テキストを右揃えに変更 */
-  font-family: 'Zen Maru Gothic', serif; /* フォントを適用 */
+  text-align: right;
+  font-family: 'Zen Maru Gothic', serif;
 `;
 
 const SignIn = () => {
@@ -106,8 +105,11 @@ const SignIn = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+  // ログイン処理
   const handleSignIn = async () => {
     setLoading(true);
+    // ユーザーのメールアドレスとパスワードを送信
+    // supabase.auth.signInWithPasswordメソッドを使用してサインインを試みる
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
 
@@ -116,6 +118,7 @@ const SignIn = () => {
     } else if (data?.user?.email_confirmed_at === null) {
       alert('メールアドレスを確認してください。');
     } else {
+      // ユーザーをホームページにリダイレクト
       router.push('/');
     }
   };

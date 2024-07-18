@@ -6,11 +6,11 @@ import styled from 'styled-components';
 const HeaderContainer = styled.header`
   width: 100vw;
   padding: 1rem 2rem;
-  background-color: #fff; /* 背景色を白に変更 */
+  background-color: #fff;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #333; /* テキストの色を黒に変更 */
+  color: #333;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   position: fixed;
   top: 0;
@@ -21,21 +21,21 @@ const HeaderContainer = styled.header`
 `;
 
 const Logo = styled.div`
-  font-family: 'Zen Maru Gothic', serif; /* フォントを適用 */
+  font-family: 'Zen Maru Gothic', serif;
   font-weight: 400;
   font-size: 1.5rem;
   cursor: pointer;
   flex-shrink: 0;
-  color: #333; /* ロゴの色を黒に変更 */
+  color: #333;
 `;
 
 const Button = styled.button`
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 5px;
-  background-color: #eede77; /* ボタンの色を黄色に変更 */
-  color: #333; /* ボタンの文字色を黒に変更 */
-  font-family: 'Zen Maru Gothic', serif; /* フォントを適用 */
+  background-color: #eede77;
+  color: #333;
+  font-family: 'Zen Maru Gothic', serif;
   font-weight: 300;
   font-size: 1rem;
   cursor: pointer;
@@ -43,7 +43,7 @@ const Button = styled.button`
   flex-shrink: 0;
 
   &:hover {
-    background-color: #e0d569; /* ホバー時のボタンの色 */
+    background-color: #e0d569;
   }
 `;
 
@@ -51,6 +51,7 @@ const Header = () => {
   const [user, setUser] = useState<any>(null);
   const router = useRouter();
 
+  // ユーザー情報を取得
   useEffect(() => {
     const fetchUser = async () => {
       const { data, error } = await supabase.auth.getSession();
@@ -63,6 +64,7 @@ const Header = () => {
     fetchUser();
   }, []);
 
+  // ログアウト処理
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
